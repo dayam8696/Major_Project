@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.major2o.R
 import com.example.major2o.databinding.KneeHealthFragmentBinding
@@ -24,11 +23,10 @@ class KneeHealthFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Get prediction result from KneeSevertyPrediction
+        // Get prediction result from KneeSeverityPrediction
         val predictedGrade = KneeSevertyPrediction.kneeHealthPrediction
 
         // Map predictions to knee health information
@@ -53,16 +51,27 @@ class KneeHealthFragment : Fragment() {
         binding.gradeTitle.text = getString(R.string.grade_text, kneeHealthInfo.grade)
         binding.explanation.text = kneeHealthInfo.explanation
 
-        // Setup ListView adapters
-        setupListView(binding.symptomsList, kneeHealthInfo.symptoms)
-        setupListView(binding.riskFactorsList, kneeHealthInfo.riskFactors)
-        setupListView(binding.dosList, kneeHealthInfo.dos)
-        setupListView(binding.dontsList, kneeHealthInfo.donts)
+        // Populate UI dynamically
+        populateLinearLayout(binding.symptomsContainer, kneeHealthInfo.symptoms)
+        populateLinearLayout(binding.riskFactorsContainer, kneeHealthInfo.riskFactors)
+        populateLinearLayout(binding.dosContainer, kneeHealthInfo.dos)
+        populateLinearLayout(binding.dontsContainer, kneeHealthInfo.donts)
     }
 
-    // Helper function to set ListView adapters
-    private fun setupListView(listView: ListView, items: List<String>) {
-        listView.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, items)
+    private fun populateLinearLayout(container: ViewGroup, items: List<String>) {
+        container.removeAllViews()
+        for (item in items) {
+            val textView = TextView(requireContext()).apply {
+                text = "• $item"
+                textSize = 16f
+                setTextColor(resources.getColor(R.color.black, null))
+            }
+            container.addView(textView)
+        }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
