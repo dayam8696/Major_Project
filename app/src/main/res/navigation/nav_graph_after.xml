@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_after"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.major2o.Fragments.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_homeFragment_to_kneeSevertyPrediction2"
+            app:destination="@id/kneeSevertyPrediction2" />
+        <action
+            android:id="@+id/action_homeFragment_to_mediceneReminder"
+            app:destination="@id/mediceneReminder" />
+    </fragment>
+    <fragment
+        android:id="@+id/kneeSevertyPrediction2"
+        android:name="com.example.major2o.Fragments.KneeSevertyPrediction"
+        android:label="KneeSevertyPrediction"
+        tools:layout="@layout/knee_severrty_prediction_fragment">
+        <action
+            android:id="@+id/action_kneeSevertyPrediction2_to_kneeHealthFragment"
+            app:destination="@id/kneeHealthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mediceneReminder"
+        android:name="com.example.major2o.Fragments.MediceneReminder"
+        android:label="MediceneReminder"
+        tools:layout="@layout/medicene_reminder"/>
+    <fragment
+        android:id="@+id/kneeHealthFragment"
+        android:name="com.example.major2o.Fragments.KneeHealthFragment"
+        android:label="KneeHealthFragment" />
+</navigation>

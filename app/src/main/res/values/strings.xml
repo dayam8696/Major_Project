@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Major2.O</string>
+    <string name="grade_text">Grade %d</string>
+
+</resources>

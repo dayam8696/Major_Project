@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#F5F5F5">
+
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Image"
+        android:padding="12dp"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:elevation="5dp"
+        android:src="@android:drawable/ic_menu_gallery"/>
+
+    <Button
+        android:id="@+id/btnPredict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Predict"
+        android:padding="12dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prediction: "
+        android:textSize="22sp"
+        android:textColor="#222222"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:padding="8dp"
+        android:background="#E0E0E0"
+        android:gravity="center"
+        android:layout_marginTop="24dp" />
+
+    <!-- "Learn More" button at the bottom -->
+    <Button
+        android:id="@+id/btnLearnMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Learn More"
+        android:padding="12dp"
+        android:backgroundTint="#2196F3"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"/>
+
+</LinearLayout>
