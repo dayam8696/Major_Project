@@ -35,6 +35,7 @@ import com.example.majorproject.ui.screens.DoctorListScreen
 import com.example.majorproject.ui.screens.FindHospitalScreen
 import com.example.majorproject.ui.screens.HeartAttackResultScreen
 import com.example.majorproject.ui.screens.HospitalListScreen
+import com.example.majorproject.ui.screens.OpdScheduleScreen
 import com.example.majorproject.ui.screens.SelectDiseaseScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
 import com.example.majorproject.viewModel.DepartmentViewModel
@@ -131,6 +132,17 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
             val departmentName = backStackEntry.arguments?.getString("departmentName") ?: ""
             DoctorListScreen(
                 departmentName = departmentName,
+                navController = navController,
+                viewModel = DepartmentViewModel()
+            )
+        }
+        composable(
+            route = "opd_schedule/{regNo}",
+            arguments = listOf(navArgument("regNo") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val regNo = backStackEntry.arguments?.getString("regNo") ?: ""
+            OpdScheduleScreen(
+                regNo = regNo,
                 navController = navController,
                 viewModel = DepartmentViewModel()
             )

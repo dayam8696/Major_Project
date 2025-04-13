@@ -1,5 +1,6 @@
 package com.example.majorproject.ui.screens
 
+
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -48,7 +49,7 @@ fun DoctorListScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues), // Fixed typo: padingValues -> paddingValues
+                        .padding(paddingValues),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
@@ -87,13 +88,13 @@ fun DoctorListScreen(
                                 .padding(vertical = 24.dp)
                         )
                     }
+                    // Replace the existing items block with this:
                     department?.doctors?.let { doctors ->
                         items(doctors) { doctor ->
                             DoctorItem(
                                 doctor = doctor,
                                 onOpdScheduleClick = {
-                                    // TODO: Implement OPD schedule navigation or action
-                                    // Example: navController.navigate("opd_schedule/${doctor.reg_no}")
+                                    navController.navigate("opd_schedule/${doctor.reg_no}")
                                 }
                             )
                         }
@@ -168,6 +169,12 @@ fun DoctorItem(doctor: Doctor, onOpdScheduleClick: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f)
                     )
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -192,7 +199,7 @@ fun DoctorItem(doctor: Doctor, onOpdScheduleClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Button(
-                    onClick = onOpdScheduleClick,
+                    onClick = { onOpdScheduleClick() }, // Updated below
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
