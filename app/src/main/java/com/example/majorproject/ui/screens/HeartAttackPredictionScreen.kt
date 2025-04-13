@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.majorproject.ml.HeartAttackPredictionModel
+import kotlinx.coroutines.launch
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.nio.ByteBuffer
@@ -141,25 +142,33 @@ fun HeartAttackPredictionScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                val coroutineScope = rememberCoroutineScope()
+
+                val context = LocalContext.current // ← move this here
+
                 Button(
                     onClick = {
-                        try {
-                            val inputs = getInputs(
-                                age, sex, cp, trtbps, chol, fbs, restecg,
-                                thalachh, exng, oldpeak, slp, caa, thall
-                            )
-                            val result = runModel(LocalContext.current, inputs)
-                            navController.navigate("heartResult/${"%.2f".format(result)}")
-                        } catch (e: Exception) {
-                            dialogTitle = "Error Message"
-                            dialogMessage = "Please enter all fields correctly."
-                            showDialog = true
+                        coroutineScope.launch {
+                            try {
+                                val inputs = getInputs(
+                                    age, sex, cp, trtbps, chol, fbs, restecg,
+                                    thalachh, exng, oldpeak, slp, caa, thall
+                                )
+                                val result = runModel(context, inputs) // use context here
+                                navController.navigate("heartResult/${"%.2f".format(result)}")
+                            } catch (e: Exception) {
+                                dialogTitle = "Error Message"
+                                dialogMessage = "Please enter all fields correctly and perfectly"
+                                showDialog = true
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Predict Risk")
                 }
+
+
             }
         }
     }
