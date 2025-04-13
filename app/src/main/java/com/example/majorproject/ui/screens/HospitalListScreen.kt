@@ -169,7 +169,8 @@ fun HospitalListScreen(navController: NavController) {
                         Log.d("HospitalListScreen", "Clicked: ${hospital.tags?.name}")
                         // Example navigation (uncomment to use):
                         // navController.navigate("hospitalDetails/${hospital.id ?: hospital.hashCode()}")
-                    }
+                    },
+                    navController = navController
                 )
             }
         }
@@ -282,7 +283,8 @@ fun ErrorState(message: String, onRetry: () -> Unit) {
 @Composable
 fun HospitalList(
     hospitals: List<HospitalElement>,
-    onHospitalClick: (HospitalElement) -> Unit
+    onHospitalClick: (HospitalElement) -> Unit,
+    navController: NavController
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -292,17 +294,24 @@ fun HospitalList(
         items(hospitals, key = { it.id ?: it.hashCode() }) { hospital ->
             HospitalItem(
                 hospital = hospital,
-                onClick = { onHospitalClick(hospital) }
+                onClick = { onHospitalClick(hospital) },
+                onDoctorsClick = {
+                    // Navigate to doctors/department screen with hospital ID
+                    navController.navigate("doctors/${hospital.id ?: hospital.hashCode()}")
+                }
             )
         }
     }
 }
-
 @Composable
 fun HospitalItem(
     hospital: HospitalElement,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onDoctorsClick: () -> Unit
 ) {
+    // State to control dialog visibility
+    var showDialog by remember { mutableStateOf(false) }
+
     // Staggered entrance animation
     var isVisible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
@@ -340,6 +349,44 @@ fun HospitalItem(
 
     val context = LocalContext.current
 
+    // Dialog for non-Majeedia hospitals
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(
+                    text = "Coming Soon",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF0D3B66)
+                )
+            },
+            text = {
+                Text(
+                    text = "The doctor listing feature is under development and will be available soon!",
+                    fontSize = 16.sp,
+                    color = Color(0xFF6B7280),
+                    textAlign = TextAlign.Center
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = { showDialog = false }
+                ) {
+                    Text(
+                        text = "OK",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF0288D1)
+                    )
+                }
+            },
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color.White)
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -366,20 +413,25 @@ fun HospitalItem(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF0D3B66)
             )
-            Text(
-                text = "Latitude: ${hospital.lat}, Longitude: ${hospital.lon}",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF6B7280)
-            )
-            Text(
-                text = "Tap to view doctors",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color(0xFF0288D1)
+            AnimatedButton(
+                text = "View Doctors",
+                onClick = {
+                    // Check if the hospital is Majeedia Hospital
+                    if (hospital.tags?.name?.contains("Majeedia Hospital", ignoreCase = true) == true) {
+                        // Navigate to doctors screen
+                        onDoctorsClick()
+                    } else {
+                        // Show dialog for other hospitals
+                        showDialog = true
+                    }
+                },
+                gradientColors = listOf(Color(0xFF0288D1), Color(0xFF4FC3F7)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
             )
             AnimatedButton(
-                text = "Open in Maps",
+                text = "Show on Maps",
                 onClick = {
                     val gmmIntentUri = "geo:${hospital.lat},${hospital.lon}?q=${hospital.lat},${hospital.lon}(${hospital.tags?.name ?: "Hospital"})"
                     val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(gmmIntentUri))
