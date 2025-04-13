@@ -60,14 +60,16 @@ Explore the app's interface with these screenshots:
 |--------------|
 | <img src="Screens/HomeScreen.jpg" width="300" alt="Home Screen 1"> |
 
+#### Prediction Screens
 | Knee Severity Prediction Screen | Knee AI Guidence | 
 |------------------|---------------|
 | <img src="Screens/kneePrediction.jpg" width="250" alt="kneePrediction"> | <img src="Screens/KneeAIGuidence.jpg" width="250" alt="KneeAIGuidence"> |
 
-#### Diagnosis Screens
+
 | Diabetes Prediction | Diabetes Results |
 |--------------------|------------------|
 | <img src="Screens/DiaPara.jpg" width="250" alt="Diabetes Parameters"> | <img src="Screens/DiaResult.jpg" width="250" alt="Diabetes Results"> | 
+
 
 | Heart Prediction | Heart Results |
 |--------------------|------------------|
