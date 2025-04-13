@@ -31,6 +31,9 @@ import com.example.majorproject.R
 
 @Composable
 fun HomeScreen(navController: NavController) {
+    // State to control dialog visibility
+    var showComingSoonDialog by remember { mutableStateOf(false) }
+
     // Animation states for fade-in and slide-in
     val fadeAnim by animateFloatAsState(
         targetValue = 1f,
@@ -153,9 +156,9 @@ fun HomeScreen(navController: NavController) {
                         items(
                             listOf(
                                 HealthDataModel("Predict Disease", Color(0xFFE91E63)) { navController.navigate("SelectDiseaseScreen") },
-                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { navController.navigate("HospitalListScreen")},
-                                HealthDataModel("Medicine Reminder", Color(0xFF9C27B0)) { navController.navigate("MedicineReminderScreen") },
-                                HealthDataModel("Inventory Management", Color(0xFF009688)) { /* Add navigation if needed */ }
+                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { navController.navigate("HospitalListScreen") },
+                                HealthDataModel("Medicine Reminder", Color(0xFF9C27B0)) { showComingSoonDialog = true },
+                                HealthDataModel("Inventory Management", Color(0xFF009688)) { showComingSoonDialog = true }
                             )
                         ) { item ->
                             HealthDataItem(
@@ -167,6 +170,39 @@ fun HomeScreen(navController: NavController) {
                     }
                 }
             }
+        }
+
+        // Coming Soon Dialog
+        if (showComingSoonDialog) {
+            AlertDialog(
+                onDismissRequest = { showComingSoonDialog = false },
+                title = {
+                    Text(
+                        text = "Coming Soon",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A3C6D)
+                    )
+                },
+                text = {
+                    Text(
+                        text = "This feature is under development and will be available soon!",
+                        fontSize = 16.sp,
+                        color = Color(0xFF1A3C6D)
+                    )
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = { showComingSoonDialog = false },
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF1976D2))
+                    ) {
+                        Text("OK")
+                    }
+                },
+                shape = RoundedCornerShape(12.dp),
+                containerColor = Color.White,
+                modifier = Modifier.shadow(8.dp, RoundedCornerShape(12.dp))
+            )
         }
     }
 }
