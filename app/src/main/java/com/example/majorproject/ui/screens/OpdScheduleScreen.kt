@@ -1,6 +1,5 @@
 package com.example.majorproject.ui.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,6 +33,44 @@ fun OpdScheduleScreen(
     viewModel: DepartmentViewModel = viewModel()
 ) {
     val departments by viewModel.departmentsFlow.collectAsState()
+
+    // Show progress bar while loading data
+    if (departments.isEmpty()) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            text = "Loading OPD Schedule...",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                )
+            },
+            content = { paddingValues ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                }
+            }
+        )
+        return
+    }
+
     // Find the doctor by reg_no
     val doctor: Doctor? = departments
         .flatMap { it.doctors ?: emptyList() }
