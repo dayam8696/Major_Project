@@ -153,7 +153,7 @@ fun HomeScreen(navController: NavController) {
                         items(
                             listOf(
                                 HealthDataModel("Predict Disease", Color(0xFFE91E63)) { navController.navigate("SelectDiseaseScreen") },
-                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { /* Add navigation if needed */ },
+                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { navController.navigate("FindHospitalScreen")},
                                 HealthDataModel("Medicine Reminder", Color(0xFF9C27B0)) { navController.navigate("MedicineReminderScreen") },
                                 HealthDataModel("Inventory Management", Color(0xFF009688)) { /* Add navigation if needed */ }
                             )

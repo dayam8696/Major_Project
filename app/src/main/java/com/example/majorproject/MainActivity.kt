@@ -26,6 +26,7 @@ import com.example.majorproject.ui.screens.KneeSeverityPredictionScreen
 import com.example.majorproject.ui.MedicineReminderScreen
 import com.example.majorproject.ui.screens.DiabetesPredictionScreen
 import com.example.majorproject.ui.screens.DiabetesResultScreen
+import com.example.majorproject.ui.screens.FindHospitalScreen
 import com.example.majorproject.ui.screens.HeartAttackResultScreen
 import com.example.majorproject.ui.screens.SelectDiseaseScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
@@ -105,6 +106,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
                 },
                  navController
             )
+        }
+        composable(route = "FindHospitalScreen")  {
+            FindHospitalScreen(navController)
         }
     }
 }
