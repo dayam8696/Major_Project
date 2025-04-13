@@ -297,7 +297,7 @@ fun HospitalList(
                 onClick = { onHospitalClick(hospital) },
                 onDoctorsClick = {
                     // Navigate to doctors/department screen with hospital ID
-                    navController.navigate("doctors/${hospital.id ?: hospital.hashCode()}")
+                    navController.navigate("DepartmentScreen")
                 }
             )
         }

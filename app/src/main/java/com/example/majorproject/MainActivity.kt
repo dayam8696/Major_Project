@@ -24,6 +24,7 @@ import com.example.majorproject.ui.screens.HomeScreen
 import com.example.majorproject.ui.screens.KneeHealthScreen
 import com.example.majorproject.ui.screens.KneeSeverityPredictionScreen
 import com.example.majorproject.ui.MedicineReminderScreen
+import com.example.majorproject.ui.screens.DepartmentScreen
 import com.example.majorproject.ui.screens.DiabetesPredictionScreen
 import com.example.majorproject.ui.screens.DiabetesResultScreen
 import com.example.majorproject.ui.screens.FindHospitalScreen
@@ -31,6 +32,7 @@ import com.example.majorproject.ui.screens.HeartAttackResultScreen
 import com.example.majorproject.ui.screens.HospitalListScreen
 import com.example.majorproject.ui.screens.SelectDiseaseScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
+import com.example.majorproject.viewModel.DepartmentViewModel
 import com.example.majorproject.viewModel.GeminiViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -113,6 +115,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
         }
         composable(route = "HospitalListScreen")  {
             HospitalListScreen(navController)
+        }
+        composable(route = "DepartmentScreen")  {
+            DepartmentScreen(viewModel = DepartmentViewModel() , navController)
         }
     }
 }
