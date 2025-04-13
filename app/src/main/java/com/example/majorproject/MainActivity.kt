@@ -28,6 +28,7 @@ import com.example.majorproject.ui.screens.DiabetesPredictionScreen
 import com.example.majorproject.ui.screens.DiabetesResultScreen
 import com.example.majorproject.ui.screens.FindHospitalScreen
 import com.example.majorproject.ui.screens.HeartAttackResultScreen
+import com.example.majorproject.ui.screens.HospitalListScreen
 import com.example.majorproject.ui.screens.SelectDiseaseScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
 import com.example.majorproject.viewModel.GeminiViewModelFactory
@@ -109,6 +110,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
         }
         composable(route = "FindHospitalScreen")  {
             FindHospitalScreen(navController)
+        }
+        composable(route = "HospitalListScreen")  {
+            HospitalListScreen(navController)
         }
     }
 }

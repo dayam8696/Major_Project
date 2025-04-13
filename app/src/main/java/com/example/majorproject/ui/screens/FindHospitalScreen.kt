@@ -34,7 +34,6 @@ fun FindHospitalScreen(navController: NavController) {
         "Venkateshwar Hospital"
     )
 
-    var city by remember { mutableStateOf("Delhi") }
     var selectedHospital by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
 
@@ -44,7 +43,7 @@ fun FindHospitalScreen(navController: NavController) {
     val fadeAnim by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(
-            durationMillis = 800,
+            durationMillis = 1000,
             easing = FastOutSlowInEasing
         ),
         label = "fade_animation"
@@ -53,10 +52,20 @@ fun FindHospitalScreen(navController: NavController) {
     val slideAnim by animateDpAsState(
         targetValue = 0.dp,
         animationSpec = tween(
-            durationMillis = 1000,
+            durationMillis = 1200,
             easing = FastOutSlowInEasing
         ),
         label = "slide_animation"
+    )
+
+    // Glowing effect for button
+    val glowAnim by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1500, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "glow_animation"
     )
 
     Box(
@@ -65,8 +74,8 @@ fun FindHospitalScreen(navController: NavController) {
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFFE6F0FA),
-                        Color(0xFFF5F9FF)
+                        Color(0xFFE3F2FD),
+                        Color(0xFFF0F7FF)
                     )
                 )
             )
@@ -86,25 +95,25 @@ fun FindHospitalScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 32.dp)
-                    .shadow(8.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+                    .shadow(10.dp, RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(20.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f)),
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp),
+                    modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = "Find a Hospital",
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1A3C6D)
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color(0xFF0D3B66)
                     )
                     Text(
-                        text = "Locate the best healthcare facilities",
+                        text = "Discover top healthcare in Delhi",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color.Gray,
+                        color = Color(0xFF6B7280),
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
@@ -114,29 +123,36 @@ fun FindHospitalScreen(navController: NavController) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(4.dp, RoundedCornerShape(16.dp))
+                    .shadow(6.dp, RoundedCornerShape(16.dp))
                     .clip(RoundedCornerShape(16.dp)),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp),
+                    modifier = Modifier.padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    // City TextField
-                    OutlinedTextField(
-                        value = city,
-                        onValueChange = { city = it },
-                        label = { Text("City") },
-                        singleLine = true,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
-                            focusedIndicatorColor = Color(0xFF1976D2),
-                            unfocusedIndicatorColor = Color.Gray.copy(alpha = 0.3f),
-                            focusedLabelColor = Color(0xFF1976D2),
-                            cursorColor = Color(0xFF1976D2)
-                        )
-                    )
+                    // City Display (Non-editable)
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(12.dp)),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFFF8FAFC)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "City: Delhi",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color(0xFF0D3B66)
+                            )
+                        }
+                    }
 
                     // Hospital Dropdown
                     ExposedDropdownMenuBox(
@@ -153,10 +169,13 @@ fun FindHospitalScreen(navController: NavController) {
                             },
                             shape = RoundedCornerShape(12.dp),
                             colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color(0xFF1976D2),
+                                focusedIndicatorColor = Color(0xFF0288D1),
                                 unfocusedIndicatorColor = Color.Gray.copy(alpha = 0.3f),
-                                focusedLabelColor = Color(0xFF1976D2),
-                                cursorColor = Color(0xFF1976D2)
+                                focusedLabelColor = Color(0xFF0288D1),
+                                unfocusedLabelColor = Color.Gray,
+                                focusedContainerColor = Color.White,
+                                unfocusedContainerColor = Color.White,
+                                cursorColor = Color(0xFF0288D1) // Fixed the error here
                             ),
                             modifier = Modifier
                                 .menuAnchor()
@@ -168,11 +187,31 @@ fun FindHospitalScreen(navController: NavController) {
                             onDismissRequest = { expanded = false },
                             modifier = Modifier
                                 .background(Color.White)
-                                .shadow(4.dp, RoundedCornerShape(8.dp))
+                                .shadow(6.dp, RoundedCornerShape(12.dp))
+                                .fillMaxWidth()
                         ) {
-                            hospitalList.forEach { hospital ->
+                            hospitalList.forEachIndexed { index, hospital ->
+                                // Staggered animation for dropdown items
+                                val itemFade by animateFloatAsState(
+                                    targetValue = if (expanded) 1f else 0f,
+                                    animationSpec = tween(
+                                        durationMillis = 300,
+                                        delayMillis = index * 50,
+                                        easing = FastOutSlowInEasing
+                                    ),
+                                    label = "item_fade_$index"
+                                )
+
                                 DropdownMenuItem(
-                                    text = { Text(hospital, fontSize = 16.sp, color = Color(0xFF1A3C6D)) },
+                                    text = {
+                                        Text(
+                                            hospital,
+                                            fontSize = 16.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = Color(0xFF0D3B66),
+                                            modifier = Modifier.graphicsLayer(alpha = itemFade)
+                                        )
+                                    },
                                     onClick = {
                                         selectedHospital = hospital
                                         expanded = false
@@ -180,7 +219,12 @@ fun FindHospitalScreen(navController: NavController) {
                                     },
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 8.dp)
+                                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                                        .background(
+                                            if (selectedHospital == hospital) Color(0xFFE3F2FD)
+                                            else Color.Transparent,
+                                            RoundedCornerShape(8.dp)
+                                        )
                                 )
                             }
                         }
@@ -188,16 +232,17 @@ fun FindHospitalScreen(navController: NavController) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
             // Proceed Button
             AnimatedButton(
                 text = "Proceed",
                 onClick = { /* Handle submit or navigation */ },
-                gradientColors = listOf(Color(0xFF1976D2), Color(0xFF42A5F5)),
+                gradientColors = listOf(Color(0xFF0288D1), Color(0xFF4FC3F7)),
+                glowAlpha = glowAnim,
                 modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(56.dp)
+                    .fillMaxWidth(0.75f)
+                    .height(60.dp)
             )
         }
     }
@@ -208,6 +253,7 @@ fun AnimatedButton(
     text: String,
     onClick: () -> Unit,
     gradientColors: List<Color>,
+    glowAlpha: Float,
     modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -222,21 +268,26 @@ fun AnimatedButton(
     )
 
     val elevation by animateDpAsState(
-        targetValue = if (isPressed) 4.dp else 8.dp,
+        targetValue = if (isPressed) 6.dp else 10.dp,
         animationSpec = tween(durationMillis = 200),
         label = "button_elevation"
     )
 
-    Card(
-        modifier = modifier
+    Box(
+        modifier = Modifier
             .scale(scale)
-            .shadow(elevation, RoundedCornerShape(12.dp))
-            .clip(RoundedCornerShape(12.dp))
+            .shadow(
+                elevation = elevation,
+                shape = RoundedCornerShape(14.dp),
+                ambientColor = Color(0xFF0288D1).copy(alpha = glowAlpha * 0.5f),
+                spotColor = Color(0xFF0288D1).copy(alpha = glowAlpha * 0.5f)
+            )
+            .clip(RoundedCornerShape(14.dp))
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
-            ) { onClick() },
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+            ) { onClick() }
+            .then(modifier)
     ) {
         Box(
             modifier = Modifier
@@ -246,8 +297,8 @@ fun AnimatedButton(
         ) {
             Text(
                 text = text,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
                 color = Color.White
             )
         }
