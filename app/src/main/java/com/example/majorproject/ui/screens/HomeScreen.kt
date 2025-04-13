@@ -88,8 +88,8 @@ fun HomeScreen(navController: NavController) {
         )
         Spacer(modifier = Modifier.height(12.dp))
         FavoriteToolItem(
-            title = "Graph Analysis",
-            description = "Analyze your medical data",
+            title = "Predict Disease",
+            description = "Use AI to predict diseases based on your health data",
             imageRes = R.drawable.graph,
             gradientColors = listOf(Color(0xFFFF9800), Color(0xFFFFB300)), // Orange gradient
             navController = navController
@@ -157,7 +157,7 @@ fun FavoriteToolItem(
                         if (title == "Joint Analysis") {
                             navController.navigate("kneePredictionScreen")
                         }
-                        if (title == "Graph Analysis") {
+                        if (title == "Predict Disease") {
                             navController.navigate("SelectDiseaseScreen")
                         }
                     },
