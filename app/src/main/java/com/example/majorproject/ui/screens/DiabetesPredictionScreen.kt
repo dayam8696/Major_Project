@@ -1,6 +1,7 @@
 package com.example.majorproject.ui.screens
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -188,8 +189,7 @@ fun DiabetesPredictionScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         )
-
-        // Predict Button
+// Predict Button
         Button(
             onClick = {
                 if (validateInputs(
@@ -207,7 +207,10 @@ fun DiabetesPredictionScreen(navController: NavController) {
                         hba1cLevel = hba1cLevel.toFloat(),
                         bloodGlucoseLevel = bloodGlucoseLevel.toFloat()
                     )
-                    navController.navigate("result/$prediction")
+                    // Show a Toast with the prediction value
+                    Toast.makeText(context, "Prediction: $prediction", Toast.LENGTH_SHORT).show()
+                    DiabetesResultHolder.result = prediction
+                    navController.navigate(route = "DiabetesResultScreen")
                 }
             },
             modifier = Modifier
@@ -216,14 +219,11 @@ fun DiabetesPredictionScreen(navController: NavController) {
         ) {
             Text("Predict", style = MaterialTheme.typography.bodyLarge)
         }
+
     }
 }
 
-@Composable
-fun DiabetesResultScreen() {
-    // This would display your prediction result
-    // Implement based on your needs
-}
+
 
 @Composable
 fun Spinner(
@@ -325,5 +325,8 @@ fun predictDiabetesRisk(
 
     model.close()
 
-    return prediction * 100 // Return as percentage
+    return prediction  // Return as percentage
+}
+object DiabetesResultHolder {
+    var result: Float? = null
 }

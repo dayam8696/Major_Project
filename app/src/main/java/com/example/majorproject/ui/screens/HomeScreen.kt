@@ -158,7 +158,7 @@ fun FavoriteToolItem(
                             navController.navigate("kneePredictionScreen")
                         }
                         if (title == "Graph Analysis") {
-                            navController.navigate("HearthAttackPredictionScreen")
+                            navController.navigate("SelectDiseaseScreen")
                         }
                     },
                     shape = RoundedCornerShape(8.dp),

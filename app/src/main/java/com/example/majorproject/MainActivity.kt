@@ -24,7 +24,10 @@ import com.example.majorproject.ui.screens.HomeScreen
 import com.example.majorproject.ui.screens.KneeHealthScreen
 import com.example.majorproject.ui.screens.KneeSeverityPredictionScreen
 import com.example.majorproject.ui.MedicineReminderScreen
+import com.example.majorproject.ui.screens.DiabetesPredictionScreen
+import com.example.majorproject.ui.screens.DiabetesResultScreen
 import com.example.majorproject.ui.screens.HeartAttackResultScreen
+import com.example.majorproject.ui.screens.SelectDiseaseScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
 import com.example.majorproject.viewModel.GeminiViewModelFactory
 
@@ -82,8 +85,26 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
         composable(route = "HearthAttackPredictionScreen"){
            HeartAttackPredictionScreen(navController)
         }
+
         composable(route = "HeartAttackResultScreen"){
             HeartAttackResultScreen(navController)
+        }
+        composable(route = "DiabetesPredictionScreen") {
+            DiabetesPredictionScreen(navController)
+        }
+        composable(route = "DiabetesResultScreen") {
+            DiabetesResultScreen(navController)
+        }
+        composable(route = "SelectDiseaseScreen") {
+            SelectDiseaseScreen(
+                onDiabetesClick = {
+                    navController.navigate("DiabetesPredictionScreen")
+                },
+                onHeartClick = {
+                    navController.navigate("HeartAttackPredictionScreen")
+                },
+                navController = navController
+            )
         }
     }
 }
