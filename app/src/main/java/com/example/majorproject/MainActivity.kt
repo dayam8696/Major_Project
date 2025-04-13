@@ -1,6 +1,7 @@
 package com.example.majorproject
 
 
+import HeartAttackPredictionScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import com.example.majorproject.ui.screens.HomeScreen
 import com.example.majorproject.ui.screens.KneeHealthScreen
 import com.example.majorproject.ui.screens.KneeSeverityPredictionScreen
 import com.example.majorproject.ui.MedicineReminderScreen
+import com.example.majorproject.ui.screens.HeartAttackResultScreen
 import com.example.majorproject.ui.theme.MajorProjectTheme
 import com.example.majorproject.viewModel.GeminiViewModelFactory
 
@@ -77,9 +79,12 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
                 navController = navController
             )
         }
-//        composable(route = "changeScreen"){
-//           CubeScreen()
-//        }
+        composable(route = "HearthAttackPredictionScreen"){
+           HeartAttackPredictionScreen(navController)
+        }
+        composable(route = "HeartAttackResultScreen"){
+            HeartAttackResultScreen(navController)
+        }
     }
 }
 

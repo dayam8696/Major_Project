@@ -1,4 +1,6 @@
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -155,7 +157,20 @@ fun HeartAttackPredictionScreen(navController: NavController) {
                                     thalachh, exng, oldpeak, slp, caa, thall
                                 )
                                 val result = runModel(context, inputs) // use context here
-                                navController.navigate("heartResult/${"%.2f".format(result)}")
+                                ResultHolder.predictedRisk = result
+                                navController.navigate("HeartAttackResultScreen")
+
+                               // navController.navigate("heartResult/${"%.2f".format(result)}")
+
+                                // Log the result
+                                Log.d("HeartPrediction", "Predicted risk: ${"%.2f".format(result)}")
+
+                                // Show toast
+                                Toast.makeText(
+                                    context,
+                                    "Predicted risk: ${"%.2f".format(result)}",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             } catch (e: Exception) {
                                 dialogTitle = "Error Message"
                                 dialogMessage = "Please enter all fields correctly and perfectly"
@@ -245,4 +260,8 @@ fun runModel(context: Context, inputData: FloatArray): Float {
 
     model.close()
     return outputValue
+}
+
+object ResultHolder {
+    var predictedRisk: Float = 0.0f
 }
