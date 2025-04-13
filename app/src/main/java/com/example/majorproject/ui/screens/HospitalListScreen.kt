@@ -2,7 +2,9 @@ package com.example.majorproject.ui.screens
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -336,6 +338,8 @@ fun HospitalItem(
         label = "item_scale"
     )
 
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -369,10 +373,29 @@ fun HospitalItem(
                 color = Color(0xFF6B7280)
             )
             Text(
-                text = "Tap to view more details",
+                text = "Tap to view doctors",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
                 color = Color(0xFF0288D1)
+            )
+            AnimatedButton(
+                text = "Open in Maps",
+                onClick = {
+                    val gmmIntentUri = "geo:${hospital.lat},${hospital.lon}?q=${hospital.lat},${hospital.lon}(${hospital.tags?.name ?: "Hospital"})"
+                    val mapIntent = Intent(Intent.ACTION_VIEW, Uri.parse(gmmIntentUri))
+                    mapIntent.setPackage("com.google.android.apps.maps")
+                    try {
+                        context.startActivity(mapIntent)
+                    } catch (e: Exception) {
+                        // Fallback: Open in browser if Google Maps app is not installed
+                        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/?api=1&query=${hospital.lat},${hospital.lon}"))
+                        context.startActivity(webIntent)
+                    }
+                },
+                gradientColors = listOf(Color(0xFF0288D1), Color(0xFF4FC3F7)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
             )
         }
     }
