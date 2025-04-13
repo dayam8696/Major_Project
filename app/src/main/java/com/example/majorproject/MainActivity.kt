@@ -101,9 +101,9 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
                     navController.navigate("DiabetesPredictionScreen")
                 },
                 onHeartClick = {
-                    navController.navigate("HeartAttackPredictionScreen")
+                    navController.navigate("HearthAttackPredictionScreen")
                 },
-                navController = navController
+                 navController
             )
         }
     }

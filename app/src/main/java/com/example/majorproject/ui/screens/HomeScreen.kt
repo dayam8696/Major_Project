@@ -1,33 +1,27 @@
 package com.example.majorproject.ui.screens
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,83 +31,184 @@ import com.example.majorproject.R
 
 @Composable
 fun HomeScreen(navController: NavController) {
-    Column(
+    // Animation states for fade-in and slide-in
+    val fadeAnim by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(
+            durationMillis = 800,
+            easing = FastOutSlowInEasing
+        ),
+        label = "fade_animation"
+    )
+
+    val slideAnim by animateDpAsState(
+        targetValue = 0.dp,
+        animationSpec = tween(
+            durationMillis = 1000,
+            easing = FastOutSlowInEasing
+        ),
+        label = "slide_animation"
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F7FA)) // Light background
-            .padding(16.dp)
-    ) {
-        // Header
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Home",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF1A73E8) // Blue accent
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFFE6F0FA),
+                        Color(0xFFF5F9FF)
+                    )
+                )
             )
-            IconButton(
-                onClick = { /* Settings action */ },
-                modifier = Modifier
-                    .background(Color(0xFFE3F2FD), CircleShape)
+            .padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(y = slideAnim)
+                .graphicsLayer(alpha = fadeAnim),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            // Header
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_settings_24),
+                Text(
+                    text = "Health Dashboard",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF1A3C6D)
+                )
+                AnimatedIconButton(
+                    onClick = { /* Settings action */ },
+                    iconRes = R.drawable.baseline_settings_24,
                     contentDescription = "Settings",
-                    tint = Color(0xFF1A73E8)
+                    tint = Color(0xFF1976D2)
                 )
             }
+
+            // Favorite Tools Section
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(6.dp, RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Favorite Tools",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A3C6D)
+                    )
+                    FavoriteToolItem(
+                        title = "Joint Analysis",
+                        description = "Analyze your joint condition with AI",
+                        imageRes = R.drawable.joint,
+                        gradientColors = listOf(Color(0xFF4CAF50), Color(0xFF81C784)),
+                        onClick = { navController.navigate("kneePredictionScreen") }
+                    )
+                    FavoriteToolItem(
+                        title = "Predict Disease",
+                        description = "Use AI to predict diseases based on your health data",
+                        imageRes = R.drawable.graph,
+                        gradientColors = listOf(Color(0xFFFF9800), Color(0xFFFFB300)),
+                        onClick = { navController.navigate("SelectDiseaseScreen") }
+                    )
+                }
+            }
+
+            // Health Data Section (Scrollable)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // Allow card to take remaining space
+                    .shadow(6.dp, RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(16.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    Text(
+                        text = "Health Data",
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF1A3C6D),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(
+                            listOf(
+                                HealthDataModel("Predict Disease", Color(0xFFE91E63)) { navController.navigate("SelectDiseaseScreen") },
+                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { /* Add navigation if needed */ },
+                                HealthDataModel("Medicine Reminder", Color(0xFF9C27B0)) { navController.navigate("MedicineReminderScreen") },
+                                HealthDataModel("Inventory Management", Color(0xFF009688)) { /* Add navigation if needed */ }
+                            )
+                        ) { item ->
+                            HealthDataItem(
+                                title = item.title,
+                                iconTint = item.iconTint,
+                                onClick = item.onClick
+                            )
+                        }
+                    }
+                }
+            }
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(24.dp))
+data class HealthDataModel(
+    val title: String,
+    val iconTint: Color,
+    val onClick: () -> Unit
+)
 
-        // Favorite Tools Section
-        Text(
-            text = "Favorite Tools",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF2C3E50) // Darker shade
+@Composable
+fun AnimatedIconButton(
+    onClick: () -> Unit,
+    iconRes: Int,
+    contentDescription: String,
+    tint: Color
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.9f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "icon_scale"
+    )
+
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .scale(scale)
+            .size(48.dp)
+            .background(Color(0xFFE3F2FD), CircleShape)
+            .clip(CircleShape)
+    ) {
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = contentDescription,
+            tint = tint,
+            modifier = Modifier.size(24.dp)
         )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        FavoriteToolItem(
-            title = "Joint Analysis",
-            description = "Analyze joint condition",
-            imageRes = R.drawable.joint,
-            gradientColors = listOf(Color(0xFF4CAF50), Color(0xFF81C784)), // Green gradient
-            navController = navController
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        FavoriteToolItem(
-            title = "Predict Disease",
-            description = "Use AI to predict diseases based on your health data",
-            imageRes = R.drawable.graph,
-            gradientColors = listOf(Color(0xFFFF9800), Color(0xFFFFB300)), // Orange gradient
-            navController = navController
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Health Data Section
-        Text(
-            text = "Health Data",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF2C3E50)
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        HealthDataItem(title = "Predict Disease", iconTint = Color(0xFFE91E63), navController = navController)
-        Spacer(modifier = Modifier.height(8.dp))
-        HealthDataItem(title = "Nearby Hospitals", iconTint = Color(0xFF2196F3), navController = navController)
-        Spacer(modifier = Modifier.height(8.dp))
-        HealthDataItem(title = "Medicine Reminder", iconTint = Color(0xFF9C27B0), navController = navController) // Updated
-        Spacer(modifier = Modifier.height(8.dp))
-        HealthDataItem(title = "Inventory Management", iconTint = Color(0xFF009688), navController = navController)
-
     }
 }
 
@@ -123,108 +218,140 @@ fun FavoriteToolItem(
     description: String,
     imageRes: Int,
     gradientColors: List<Color>,
-    navController: NavController
+    onClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "card_scale"
+    )
+
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .shadow(4.dp, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp)),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Brush.horizontalGradient(gradientColors))
-                .padding(12.dp),
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { onClick() }
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Text(
                     text = title,
-                    fontSize = 18.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
-                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = description,
                     fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.9f)
+                    color = Color.White.copy(alpha = 0.9f),
+                    lineHeight = 20.sp
                 )
-                Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = {
-                        if (title == "Joint Analysis") {
-                            navController.navigate("kneePredictionScreen")
-                        }
-                        if (title == "Predict Disease") {
-                            navController.navigate("SelectDiseaseScreen")
-                        }
-                    },
+                    onClick = onClick,
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.White,
                         contentColor = gradientColors[0]
-                    )
+                    ),
+                    modifier = Modifier
+                        .height(40.dp)
+                        .animateContentSize()
                 ) {
                     Text(
                         text = "Start",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.SemiBold
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(12.dp))
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = title,
+            Spacer(modifier = Modifier.width(16.dp))
+            Card(
                 modifier = Modifier
                     .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
+                    .shadow(2.dp, RoundedCornerShape(8.dp)),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = imageRes),
+                    contentDescription = title,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                )
+            }
         }
     }
 }
 
 @Composable
-fun HealthDataItem(title: String, iconTint: Color , navController: NavController) {
+fun HealthDataItem(
+    title: String,
+    iconTint: Color,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.98f else 1f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "item_scale"
+    )
+
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .clickable {
-            if (title == "Medicine Reminder") {
-                navController.navigate("MedicineReminderScreen")
-            }
-        },
-        elevation = CardDefaults.cardElevation(2.dp),
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        modifier = Modifier
+            .fillMaxWidth()
+            .scale(scale)
+            .shadow(3.dp, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) { onClick() },
+        colors = CardDefaults.cardColors(containerColor = Color.White),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {  }
-                .padding(12.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = title,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2C3E50)
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF1A3C6D)
             )
             Icon(
                 painter = painterResource(id = R.drawable.baseline_arrow_right_alt_24),
-                contentDescription = "Arrow Right",
-                tint = iconTint
+                contentDescription = "Navigate",
+                tint = iconTint,
+                modifier = Modifier.size(24.dp)
             )
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeScreenPreview() {
-//    // NavController cannot be instantiated in preview, so we pass a dummy function
-//    HomeScreen(navController = object : NavController(LocalContext.current) {})
-//}
