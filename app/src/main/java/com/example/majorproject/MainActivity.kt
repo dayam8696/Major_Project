@@ -15,9 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.majorproject.dataModel.Department
+import com.example.majorproject.dataModel.DepartmentResponse
 import com.example.majorproject.repository.GeminiRepository
 import com.example.majorproject.ui.screens.GeminiScreen
 import com.example.majorproject.ui.screens.HomeScreen
@@ -27,6 +31,7 @@ import com.example.majorproject.ui.MedicineReminderScreen
 import com.example.majorproject.ui.screens.DepartmentScreen
 import com.example.majorproject.ui.screens.DiabetesPredictionScreen
 import com.example.majorproject.ui.screens.DiabetesResultScreen
+import com.example.majorproject.ui.screens.DoctorListScreen
 import com.example.majorproject.ui.screens.FindHospitalScreen
 import com.example.majorproject.ui.screens.HeartAttackResultScreen
 import com.example.majorproject.ui.screens.HospitalListScreen
@@ -118,6 +123,17 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
         }
         composable(route = "DepartmentScreen")  {
             DepartmentScreen(viewModel = DepartmentViewModel() , navController)
+        }
+        composable(
+            route = "doctor_list/{departmentName}",
+            arguments = listOf(navArgument("departmentName") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val departmentName = backStackEntry.arguments?.getString("departmentName") ?: ""
+            DoctorListScreen(
+                departmentName = departmentName,
+                navController = navController,
+                viewModel = DepartmentViewModel()
+            )
         }
     }
 }

@@ -13,6 +13,7 @@ data class Doctor(
     val name: String,
     val designation: String,
     val reg_no: String,
+    val phone: String?,
     val email: String,
     val expertise: List<String>,
     val area_of_interest: List<String>,

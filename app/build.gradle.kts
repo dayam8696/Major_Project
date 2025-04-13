@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+   
 }
 
 android {
@@ -70,5 +71,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 // Location
     implementation("com.google.android.gms:play-services-location:21.0.1")
+
 
 }
