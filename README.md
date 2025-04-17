@@ -155,15 +155,3 @@ cd sehat360
 # Open in Android Studio and run on a connected device or emulator.
 ```
 
----
-
-# 👨‍💻 *Developed by*
-
-**Team - Wellness Wizards**  
-*Empowering healthcare with technology.*
-
----
-
-# 🔖 *Hashtags*
-
-#AMUHACKS4.0 #CSSAMU #AMU
