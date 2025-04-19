@@ -302,7 +302,7 @@ fun HeartAttackPredictionScreen(navController: NavController) {
                                 thalachh, exng, oldpeak, slp, caa, thall
                             )
                             val result = runModel(context, inputs)
-                            ResultHolder.predictedRisk = result
+                            ResultHolders.predictedRisk = result
                             navController.navigate("HeartAttackResultScreen")
 
                             Log.d("HeartPrediction", "Predicted risk: ${"%.2f".format(result)}")
@@ -462,6 +462,6 @@ fun runModel(context: Context, inputData: FloatArray): Float {
     return outputValue
 }
 
-object ResultHolder {
+object ResultHolders {
     var predictedRisk: Float = 0.0f
 }

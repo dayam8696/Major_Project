@@ -9,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -128,7 +129,7 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            // Health Data Section (Scrollable)
+            // Health Data Section (Scrollable Horizontally)
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -149,21 +150,42 @@ fun HomeScreen(navController: NavController) {
                         color = Color(0xFF1A3C6D),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    LazyColumn(
+                    LazyRow(
                         modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(
                             listOf(
-                                HealthDataModel("Predict Disease", Color(0xFFE91E63)) { navController.navigate("SelectDiseaseScreen") },
-                                HealthDataModel("Nearby Hospitals", Color(0xFF2196F3)) { navController.navigate("HospitalListScreen") },
-                                HealthDataModel("Medicine Reminder", Color(0xFF9C27B0)) { showComingSoonDialog = true },
-                                HealthDataModel("Inventory Management", Color(0xFF009688)) { showComingSoonDialog = true }
+                                HealthDataModel(
+                                    title = "Predict Disease",
+                                    iconTint = Color(0xFFE91E63),
+                                    gradientColors = listOf(Color(0xFFE91E63), Color(0xFFF06292)),
+                                    onClick = { navController.navigate("SelectDiseaseScreen") }
+                                ),
+                                HealthDataModel(
+                                    title = "Nearby Hospitals",
+                                    iconTint = Color(0xFF2196F3),
+                                    gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
+                                    onClick = { navController.navigate("HospitalListScreen") }
+                                ),
+                                HealthDataModel(
+                                     title = "Emergency Contact",
+                                    iconTint = Color(0xFF9C27B0),
+                                    gradientColors = listOf(Color(0xFF9C27B0), Color(0xFFBA68C8)),
+                                    onClick = { navController.navigate("EmergencyContactScreen") }
+                                ),
+                                HealthDataModel(
+                                    title = "Inventory Management",
+                                    iconTint = Color(0xFF009688),
+                                    gradientColors = listOf(Color(0xFF009688), Color(0xFF4DB6AC)),
+                                    onClick = { showComingSoonDialog = true }
+                                )
                             )
                         ) { item ->
                             HealthDataItem(
                                 title = item.title,
                                 iconTint = item.iconTint,
+                                gradientColors = item.gradientColors,
                                 onClick = item.onClick
                             )
                         }
@@ -210,6 +232,7 @@ fun HomeScreen(navController: NavController) {
 data class HealthDataModel(
     val title: String,
     val iconTint: Color,
+    val gradientColors: List<Color>,
     val onClick: () -> Unit
 )
 
@@ -344,6 +367,7 @@ fun FavoriteToolItem(
 fun HealthDataItem(
     title: String,
     iconTint: Color,
+    gradientColors: List<Color>,
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -359,7 +383,8 @@ fun HealthDataItem(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
+            .width(200.dp) // Fixed width for each card in the row
+            .height(120.dp) // Height matched to approximate FavoriteToolItem
             .scale(scale)
             .shadow(3.dp, RoundedCornerShape(12.dp))
             .clip(RoundedCornerShape(12.dp))
@@ -367,27 +392,47 @@ fun HealthDataItem(
                 interactionSource = interactionSource,
                 indication = null
             ) { onClick() },
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
-        Row(
+        Column   (
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(Brush.horizontalGradient(gradientColors))
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement  = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = title,
-                fontSize = 18.sp,
+                fontSize = 17.sp, // Adjusted for readability
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF1A3C6D)
+                color = Color.White,
+                modifier = Modifier.weight(1f)
             )
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_arrow_right_alt_24),
-                contentDescription = "Navigate",
-                tint = iconTint,
-                modifier = Modifier.size(24.dp)
-            )
+             Icon(
+                 painter = painterResource(id = R.drawable.baseline_arrow_right_alt_24),
+                 contentDescription = "Navigate",
+                 tint = Color.White,
+                 modifier = Modifier.size(24.dp)
+             )
+
+            Button(
+                onClick = onClick,
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = gradientColors[0]
+                ),
+                modifier = Modifier
+                    .height(40.dp)
+                    .animateContentSize()
+            ) {
+                Text(
+                    text = "Start Now",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }

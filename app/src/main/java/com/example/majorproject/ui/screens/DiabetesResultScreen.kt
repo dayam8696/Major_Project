@@ -1,6 +1,5 @@
 package com.example.majorproject.ui.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+
+// Add DiabetesResultHolder here
+object ResultHolder {
+    var result: Float? = null
+}
 
 @Composable
 fun DiabetesResultScreen(navController: NavController) {
@@ -90,12 +94,35 @@ fun DiabetesResultScreen(navController: NavController) {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
-                Button(
-                    onClick = { navController.popBackStack() },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth(0.6f)
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text("Back")
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF6200EE),
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Back")
+                    }
+                    Button(
+                        onClick = {
+                            // Navigate to GeminiScreen; result is already in DiabetesResultHolder
+                            navController.navigate("DiabetesGeminiScreen")
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF03DAC5),
+                            contentColor = Color.Black
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Learn More")
+                    }
                 }
             }
         }

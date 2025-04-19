@@ -1,6 +1,5 @@
 package com.example.majorproject
 
-
 import HeartAttackPredictionScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,35 +7,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.majorproject.dataModel.Department
-import com.example.majorproject.dataModel.DepartmentResponse
 import com.example.majorproject.repository.GeminiRepository
-import com.example.majorproject.ui.screens.GeminiScreen
-import com.example.majorproject.ui.screens.HomeScreen
-import com.example.majorproject.ui.screens.KneeHealthScreen
-import com.example.majorproject.ui.screens.KneeSeverityPredictionScreen
 import com.example.majorproject.ui.MedicineReminderScreen
-import com.example.majorproject.ui.screens.DepartmentScreen
-import com.example.majorproject.ui.screens.DiabetesPredictionScreen
-import com.example.majorproject.ui.screens.DiabetesResultScreen
-import com.example.majorproject.ui.screens.DoctorListScreen
-import com.example.majorproject.ui.screens.FindHospitalScreen
-import com.example.majorproject.ui.screens.HeartAttackResultScreen
-import com.example.majorproject.ui.screens.HospitalListScreen
-import com.example.majorproject.ui.screens.OpdScheduleScreen
-import com.example.majorproject.ui.screens.SelectDiseaseScreen
+import com.example.majorproject.ui.screens.*
 import com.example.majorproject.ui.theme.MajorProjectTheme
 import com.example.majorproject.viewModel.DepartmentViewModel
 import com.example.majorproject.viewModel.GeminiViewModelFactory
@@ -48,28 +34,89 @@ class MainActivity : ComponentActivity() {
         val repository = GeminiRepository()
         val viewModelFactory = GeminiViewModelFactory(repository)
 
-
-
         setContent {
-
-            val navController = rememberNavController()
-            val context = this
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                AppNavHost(navController = navController,
-                    modifier = Modifier.padding(innerPadding),
-                    viewModelFactory = viewModelFactory,
-
-                )
-
+            MajorProjectTheme {
+                val navController = rememberNavController()
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = { BottomNavigationBar(navController) }
+                ) { innerPadding ->
+                    AppNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding),
+                        viewModelFactory = viewModelFactory
+                    )
+                }
             }
-
         }
     }
 }
 
+// Data class for bottom navigation items
+data class BottomNavItem(
+    val route: String,
+    val title: String,
+    val icon: Int // Resource ID for the icon
+)
+
+// Bottom Navigation Bar Composable
+@Composable
+fun BottomNavigationBar(navController: NavHostController) {
+    val items = listOf(
+        BottomNavItem(
+            route = "HomeScreen",
+            title = "Home",
+            icon = android.R.drawable.ic_menu_today // Replace with your own icon
+        ),
+        BottomNavItem(
+            route = "CustomQueryScreen",
+            title = "AI Guidance",
+            icon = android.R.drawable.ic_menu_info_details // Replace with your own icon
+        ),
+        BottomNavItem(
+            route = "MedicineReminderScreen",
+            title = "Reminder",
+            icon = android.R.drawable.ic_menu_agenda // Replace with your own icon
+        ),
+        BottomNavItem(
+            route = "SelectDiseaseScreen",
+            title = "Predict",
+            icon = android.R.drawable.ic_menu_search // Replace with your own icon
+        )
+    )
+
+    NavigationBar {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+
+        items.forEach { item ->
+            NavigationBarItem(
+                icon = { Icon(painter = painterResource(id = item.icon), contentDescription = item.title) },
+                label = { Text(item.title) },
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        // Pop up to the start destination to avoid stacking screens
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        // Avoid multiple instances of the same screen
+                        launchSingleTop = true
+                        // Restore state when reselecting a previously selected item
+                        restoreState = true
+                    }
+                }
+            )
+        }
+    }
+}
 
 @Composable
-fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, viewModelFactory: GeminiViewModelFactory) {
+fun AppNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModelFactory: GeminiViewModelFactory
+) {
     NavHost(navController = navController, startDestination = "HomeScreen", modifier = modifier) {
         composable("kneePredictionScreen") {
             KneeSeverityPredictionScreen(navController)
@@ -85,45 +132,40 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
         }
         composable("MedicineReminderScreen") {
             MedicineReminderScreen(
-                context = LocalContext.current, // Pass context correctly
-                medicineName = "Medicine",  // Change this dynamically
-                hour = 15,  // Set this dynamically
-                minute = 58,  // Set this dynamically
+                context = LocalContext.current,
+                medicineName = "Medicine",
+                hour = 15,
+                minute = 58,
                 navController = navController
             )
         }
-        composable(route = "HearthAttackPredictionScreen"){
-           HeartAttackPredictionScreen(navController)
+        composable("HearthAttackPredictionScreen") {
+            HeartAttackPredictionScreen(navController)
         }
-
-        composable(route = "HeartAttackResultScreen"){
+        composable("HeartAttackResultScreen") {
             HeartAttackResultScreen(navController)
         }
-        composable(route = "DiabetesPredictionScreen") {
+        composable("DiabetesPredictionScreen") {
             DiabetesPredictionScreen(navController)
         }
-        composable(route = "DiabetesResultScreen") {
+        composable("DiabetesResultScreen") {
             DiabetesResultScreen(navController)
         }
-        composable(route = "SelectDiseaseScreen") {
+        composable("SelectDiseaseScreen") {
             SelectDiseaseScreen(
-                onDiabetesClick = {
-                    navController.navigate("DiabetesPredictionScreen")
-                },
-                onHeartClick = {
-                    navController.navigate("HearthAttackPredictionScreen")
-                },
-                 navController
+                onDiabetesClick = { navController.navigate("DiabetesPredictionScreen") },
+                onHeartClick = { navController.navigate("HearthAttackPredictionScreen") },
+                navController
             )
         }
-        composable(route = "FindHospitalScreen")  {
+        composable("FindHospitalScreen") {
             FindHospitalScreen(navController)
         }
-        composable(route = "HospitalListScreen")  {
+        composable("HospitalListScreen") {
             HospitalListScreen(navController)
         }
-        composable(route = "DepartmentScreen")  {
-            DepartmentScreen(viewModel = DepartmentViewModel() , navController)
+        composable("DepartmentScreen") {
+            DepartmentScreen(viewModel = DepartmentViewModel(), navController)
         }
         composable(
             route = "doctor_list/{departmentName}",
@@ -147,21 +189,15 @@ fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier, 
                 viewModel = DepartmentViewModel()
             )
         }
-    }
-}
+        composable("EmergencyContactScreen") {
+            EmergencyContactScreen(navController)
+        }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MajorProjectTheme {
-        Greeting("Android")
+        composable("CustomQueryScreen") {
+            CustomQueryScreen(viewModelFactory ,navController)
+        }
+        composable("DiabetesGeminiScreen") {
+           DiabetesGeminiScreen(viewModelFactory ,navController)
+        }
     }
 }

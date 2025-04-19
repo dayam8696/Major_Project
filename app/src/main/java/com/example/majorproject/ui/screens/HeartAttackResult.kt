@@ -1,5 +1,6 @@
 package com.example.majorproject.ui.screens
 
+import ResultHolders
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,7 +18,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun HeartAttackResultScreen(navController: NavController) {
-    val result = ResultHolder.predictedRisk
+    val result = ResultHolders.predictedRisk
     val percentage = "%.2f".format(result * 100)
 
     Box(
