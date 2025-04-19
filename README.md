@@ -60,29 +60,40 @@ Explore the app's interface with these screenshots:
 |--------------|
 | <img src="Screens/HomeScreen.jpg" width="300" alt="Home Screen 1"> |
 
+#### Prediction Screens
+
 | Knee Severity Prediction Screen | Knee AI Guidence | 
 |------------------|---------------|
 | <img src="Screens/kneePrediction.jpg" width="250" alt="kneePrediction"> | <img src="Screens/KneeAIGuidence.jpg" width="250" alt="KneeAIGuidence"> |
 
-#### Diagnosis Screens
+
+| Choose What to Predict Screen |
+|----------------|
+| <img src="Screens/PredictScreen.jpg" width="250" alt="Predict Screen"> |
+
+
 | Diabetes Prediction | Diabetes Results |
 |--------------------|------------------|
 | <img src="Screens/DiaPara.jpg" width="250" alt="Diabetes Parameters"> | <img src="Screens/DiaResult.jpg" width="250" alt="Diabetes Results"> | 
 
+
 | Heart Prediction | Heart Results |
 |--------------------|------------------|
-| <img src="Screens/DiaPara.jpg" width="250" alt="Diabetes Parameters"> | <img src="Screens/DiaResult.jpg" width="250" alt="Diabetes Results"> | 
+| <img src="Screens/HeartPara.jpg" width="250" alt="Heart Parameters"> | <img src="Screens/HeartResult.jpg" width="250" alt="Heart Results"> | 
 
 
 
 #### Hospital/Doctor Screens
-| Nearby Hospital | OPD Screen | Direction Screen | Doctor List |
-|-----------------|-----------|------------------|-------------|
-| <img src="Screens/NearByHospital.jpg" width="200" alt="Nearby Hospital"> | <img src="Screens/OPDScreen.jpg" width="200" alt="OPD Screen"> | <img src="Screens/DirectionScreen.jpg" width="200" alt="Direction Screen"> | <img src="Screens/DoctorList.jpg" width="200" alt="Doctor List"> |
+| Nearby Hospital | Direction Screen | Select Your Department | Doctor List | OPD Screen |
+|-----------------|------------------|------------------------|-------------|------------|
+| <img src="Screens/NearByHospital.jpg" width="250" alt="Nearby Hospital"> | <img src="Screens/DirectionScreen.jpg" width="250" alt="Direction Screen"> | <img src="Screens/SelectYourDepartment.jpg" width="250" alt="Select Your Department"> | <img src="Screens/DoctorList.jpg" width="250" alt="Doctor List"> | <img src="Screens/OPDScreen.jpg" width="250" alt="OPD Screen"> |
 
-| Hospital Coming Soon | Select Your Department |
-|----------------------|-----------------------|
-| <img src="Screens/HospitalComingSoon.jpg" width="250" alt="Hospital Coming Soon"> | <img src="Screens/SelectYourDepartment.jpg" width="250" alt="Select Your Department"> |
+
+#### Coming Soon Features
+| Hospital Coming Soon | Home Coming Soon Screen |
+|----------------------|-------------------------|
+| <img src="Screens/HospitalCommingSoon.jpg" width="250" alt="Hospital Coming Soon"> | <img src="Screens/HomeScreenCommingSoon.jpg" width="250" alt="Home Coming Soon Screen"> |
+
 
 ---
 
@@ -144,15 +155,3 @@ cd sehat360
 # Open in Android Studio and run on a connected device or emulator.
 ```
 
----
-
-# 👨‍💻 *Developed by*
-
-**Team - Wellness Wizards**  
-*Empowering healthcare with technology.*
-
----
-
-# 🔖 *Hashtags*
-
-#AMUHACKS4.0 #CSSAMU #AMU
