@@ -74,13 +74,13 @@ fun BottomNavigationBar(navController: NavHostController) {
             icon = android.R.drawable.ic_menu_info_details // Replace with your own icon
         ),
         BottomNavItem(
-            route = "MedicineReminderScreen",
+            route = "MedicationAlarmScreen",
             title = "Reminder",
             icon = android.R.drawable.ic_menu_agenda // Replace with your own icon
         ),
         BottomNavItem(
-            route = "SelectDiseaseScreen",
-            title = "Predict",
+            route = "EmergencySOS",
+            title = "SOS",
             icon = android.R.drawable.ic_menu_search // Replace with your own icon
         )
     )
@@ -198,6 +198,16 @@ fun AppNavHost(
         }
         composable("DiabetesGeminiScreen") {
            DiabetesGeminiScreen(viewModelFactory ,navController)
+        }
+        composable("EmergencySOS") {
+            EmergencySOS(navController)
+        }
+        composable("MedicationAlarmScreen") {
+        MedicationAlarmScreen(navController)
+        }
+
+        composable("CostPrediction") {
+            CostPrediction( navController)
         }
     }
 }

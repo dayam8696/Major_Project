@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.example.majorproject.ml.Model
 import org.tensorflow.lite.DataType
@@ -44,6 +45,11 @@ fun DiabetesPredictionScreen(navController: NavController) {
     var bmi by remember { mutableStateOf("") }
     var hba1cLevel by remember { mutableStateOf("") }
     var bloodGlucoseLevel by remember { mutableStateOf("") }
+
+    // State for BMI calculator dialog
+    var showBmiDialog by remember { mutableStateOf(false) }
+    var weight by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
 
@@ -118,7 +124,7 @@ fun DiabetesPredictionScreen(navController: NavController) {
                     // Age Input
                     InputSection(label = "Age") {
                         OutlinedTextField(
-                            value = age, // Changed from صحة to value
+                            value = age,
                             onValueChange = { age = it },
                             label = { Text("Enter your age") },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -130,6 +136,7 @@ fun DiabetesPredictionScreen(navController: NavController) {
                             )
                         )
                     }
+
                     // Hypertension Input
                     InputSection(label = "Hypertension (Yes=1, No=0)") {
                         OutlinedTextField(
@@ -172,20 +179,34 @@ fun DiabetesPredictionScreen(navController: NavController) {
                         )
                     }
 
-                    // BMI Input
+                    // BMI Input with Calculator Button
                     InputSection(label = "BMI") {
-                        OutlinedTextField(
-                            value = bmi,
-                            onValueChange = { bmi = it },
-                            label = { Text("Enter your BMI") },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedIndicatorColor = Color(0xFF1976D2),
-                                unfocusedIndicatorColor = Color.Gray.copy(alpha = 0.3f)
+                        Column {
+                            OutlinedTextField(
+                                value = bmi,
+                                onValueChange = { bmi = it },
+                                label = { Text("Enter your BMI") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = TextFieldDefaults.colors(
+                                    focusedIndicatorColor = Color(0xFF1976D2),
+                                    unfocusedIndicatorColor = Color.Gray.copy(alpha = 0.3f)
+                                )
                             )
-                        )
+                            TextButton(
+                                onClick = { showBmiDialog = true },
+                                modifier = Modifier
+                                    .align(Alignment.End)
+                                    .padding(top = 8.dp)
+                            ) {
+                                Text(
+                                    text = "Calculate BMI",
+                                    color = Color(0xFF1976D2),
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
                     }
 
                     // HbA1c Level
@@ -218,6 +239,104 @@ fun DiabetesPredictionScreen(navController: NavController) {
                                 unfocusedIndicatorColor = Color.Gray.copy(alpha = 0.3f)
                             )
                         )
+                    }
+                }
+            }
+
+            // BMI Calculator Dialog
+            if (showBmiDialog) {
+                Dialog(onDismissRequest = { showBmiDialog = false }) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            Text(
+                                text = "Calculate BMI",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1A3C6D)
+                            )
+
+                            OutlinedTextField(
+                                value = weight,
+                                onValueChange = { weight = it },
+                                label = { Text("Weight (kg)") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+
+                            OutlinedTextField(
+                                value = height,
+                                onValueChange = { height = it },
+                                label = { Text("Height (m)") },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                TextButton(
+                                    onClick = { showBmiDialog = false }
+                                ) {
+                                    Text("Cancel", color = Color.Gray)
+                                }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Button(
+                                    onClick = {
+                                        if (weight.isNotEmpty() && height.isNotEmpty()) {
+                                            try {
+                                                val w = weight.toFloat()
+                                                val h = height.toFloat()
+                                                if (h > 0) {
+                                                    val calculatedBmi = w / (h * h)
+                                                    bmi = String.format("%.1f", calculatedBmi)
+                                                    showBmiDialog = false
+                                                    weight = ""
+                                                    height = ""
+                                                } else {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Height must be greater than 0",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            } catch (e: NumberFormatException) {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Please enter valid numbers",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Please enter both weight and height",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = Color(0xFF1976D2)
+                                    )
+                                ) {
+                                    Text("Calculate", color = Color.White)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -347,7 +466,6 @@ fun Spinner(
     }
 }
 
-// The validateInputs, predictDiabetesRisk, and DiabetesResultHolder remain unchanged
 fun validateInputs(
     age: String,
     hypertension: String,

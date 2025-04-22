@@ -65,129 +65,143 @@ fun HomeScreen(navController: NavController) {
                     )
                 )
             )
-            .padding(20.dp)
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(20.dp)
                 .offset(y = slideAnim)
                 .graphicsLayer(alpha = fadeAnim),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             // Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Health Dashboard",
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = Color(0xFF1A3C6D)
-                )
-                AnimatedIconButton(
-                    onClick = { /* Settings action */ },
-                    iconRes = R.drawable.baseline_settings_24,
-                    contentDescription = "Settings",
-                    tint = Color(0xFF1976D2)
-                )
-            }
-
-            // Favorite Tools Section
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shadow(6.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Favorite Tools",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
+                        text = "Health Dashboard",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.ExtraBold,
                         color = Color(0xFF1A3C6D)
                     )
-                    FavoriteToolItem(
-                        title = "Joint Analysis",
-                        description = "Analyze your joint condition with AI",
-                        imageRes = R.drawable.joint,
-                        gradientColors = listOf(Color(0xFF4CAF50), Color(0xFF81C784)),
-                        onClick = { navController.navigate("kneePredictionScreen") }
-                    )
-                    FavoriteToolItem(
-                        title = "Predict Disease",
-                        description = "Use AI to predict diseases based on your health data",
-                        imageRes = R.drawable.graph,
-                        gradientColors = listOf(Color(0xFFFF9800), Color(0xFFFFB300)),
-                        onClick = { navController.navigate("SelectDiseaseScreen") }
+                    AnimatedIconButton(
+                        onClick = { /* Settings action */ },
+                        iconRes = R.drawable.baseline_settings_24,
+                        contentDescription = "Settings",
+                        tint = Color(0xFF1976D2)
                     )
                 }
             }
 
-            // Health Data Section (Scrollable Horizontally)
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f) // Allow card to take remaining space
-                    .shadow(6.dp, RoundedCornerShape(16.dp))
-                    .clip(RoundedCornerShape(16.dp)),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
-            ) {
-                Column(
+            // Favorite Tools Section
+            item {
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .shadow(6.dp, RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
                 ) {
-                    Text(
-                        text = "Health Data",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF1A3C6D),
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    LazyRow(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        items(
-                            listOf(
-                                HealthDataModel(
-                                    title = "Predict Disease",
-                                    iconTint = Color(0xFFE91E63),
-                                    gradientColors = listOf(Color(0xFFE91E63), Color(0xFFF06292)),
-                                    onClick = { navController.navigate("SelectDiseaseScreen") }
-                                ),
-                                HealthDataModel(
-                                    title = "Nearby Hospitals",
-                                    iconTint = Color(0xFF2196F3),
-                                    gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
-                                    onClick = { navController.navigate("HospitalListScreen") }
-                                ),
-                                HealthDataModel(
-                                     title = "Emergency Contact",
-                                    iconTint = Color(0xFF9C27B0),
-                                    gradientColors = listOf(Color(0xFF9C27B0), Color(0xFFBA68C8)),
-                                    onClick = { navController.navigate("EmergencyContactScreen") }
-                                ),
-                                HealthDataModel(
-                                    title = "Inventory Management",
-                                    iconTint = Color(0xFF009688),
-                                    gradientColors = listOf(Color(0xFF009688), Color(0xFF4DB6AC)),
-                                    onClick = { showComingSoonDialog = true }
+                        Text(
+                            text = "Favorite Tools",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1A3C6D)
+                        )
+                        FavoriteToolItem(
+                            title = "Joint Analysis",
+                            description = "Analyze your joint condition with AI",
+                            imageRes = R.drawable.joint,
+                            gradientColors = listOf(Color(0xFF4CAF50), Color(0xFF81C784)),
+                            onClick = { navController.navigate("kneePredictionScreen") }
+                        )
+                        FavoriteToolItem(
+                            title = "Predict Disease",
+                            description = "Use AI to predict diseases based on your health data",
+                            imageRes = R.drawable.graph,
+                            gradientColors = listOf(Color(0xFFFF9800), Color(0xFFFFB300)),
+                            onClick = { navController.navigate("SelectDiseaseScreen") }
+                        )
+                        FavoriteToolItem(
+                            title = "Cost Prediction",
+                            description = "Use AI to predict diseases based on your health data",
+                            imageRes = R.drawable.graph,
+                            gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
+                            onClick = {navController.navigate("CostPrediction") }
+                        )
+                    }
+                }
+            }
+
+            // Health Data Section
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp) // Fixed height to ensure visibility
+                        .shadow(6.dp, RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(16.dp)),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Health Data",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF1A3C6D),
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        LazyRow(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(
+                                listOf(
+                                    HealthDataModel(
+                                        title = "Predict Disease",
+                                        iconTint = Color(0xFFE91E63),
+                                        gradientColors = listOf(Color(0xFFE91E63), Color(0xFFF06292)),
+                                        onClick = { navController.navigate("SelectDiseaseScreen") }
+                                    ),
+                                    HealthDataModel(
+                                        title = "Nearby Hospitals",
+
+                                        iconTint = Color(0xFF9C27B0),
+                                        gradientColors = listOf(Color(0xFF9C27B0), Color(0xFFBA68C8)),
+                                        onClick = { navController.navigate("HospitalListScreen") }
+                                    ),
+                                    HealthDataModel(
+                                        title = "Emergency Contact",
+                                        iconTint = Color(0xFF2196F3),
+                                        gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
+                                        onClick = { navController.navigate("EmergencyContactScreen") }
+                                    ),
+                                    HealthDataModel(
+                                        title = "Inventory Management",
+                                        iconTint = Color(0xFF009688),
+                                        gradientColors = listOf(Color(0xFF009688), Color(0xFF4DB6AC)),
+                                        onClick = { navController.navigate("CostPrediction") }
+                                    )
                                 )
-                            )
-                        ) { item ->
-                            HealthDataItem(
-                                title = item.title,
-                                iconTint = item.iconTint,
-                                gradientColors = item.gradientColors,
-                                onClick = item.onClick
-                            )
+                            ) { item ->
+                                HealthDataItem(
+                                    title = item.title,
+                                    iconTint = item.iconTint,
+                                    gradientColors = item.gradientColors,
+                                    onClick = item.onClick
+                                )
+                            }
                         }
                     }
                 }
@@ -394,12 +408,12 @@ fun HealthDataItem(
             ) { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color.Transparent),
     ) {
-        Column   (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Brush.horizontalGradient(gradientColors))
                 .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalArrangement  = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -409,13 +423,12 @@ fun HealthDataItem(
                 color = Color.White,
                 modifier = Modifier.weight(1f)
             )
-             Icon(
-                 painter = painterResource(id = R.drawable.baseline_arrow_right_alt_24),
-                 contentDescription = "Navigate",
-                 tint = Color.White,
-                 modifier = Modifier.size(24.dp)
-             )
-
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_arrow_right_alt_24),
+                contentDescription = "Navigate",
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
             Button(
                 onClick = onClick,
                 shape = RoundedCornerShape(8.dp),

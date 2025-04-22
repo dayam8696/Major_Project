@@ -208,13 +208,17 @@ fun EmergencyContactScreen(navController: NavController) {
                             .clip(RoundedCornerShape(16.dp)),
                         textStyle = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
                         singleLine = true,
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        colors = TextFieldDefaults.colors(
                             cursorColor = MaterialTheme.colorScheme.primary
+//                            containerColor = MaterialTheme.colorScheme.surface,
+//                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+//                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+//                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+//                            cursorColor = MaterialTheme.colorScheme.primary
                         )
                     )
+
+
 
                     // Save button
                     var saveButtonPressed by remember { mutableStateOf(false) }
