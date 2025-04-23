@@ -132,9 +132,9 @@ fun HomeScreen(navController: NavController) {
                         FavoriteToolItem(
                             title = "Cost Prediction",
                             description = "Use AI to predict diseases based on your health data",
-                            imageRes = R.drawable.graph,
+                            imageRes = R.drawable.costpred,
                             gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
-                            onClick = {navController.navigate("CostPrediction") }
+                            onClick = {navController.navigate("CostCheckupDiagChooseScreen") }
                         )
                     }
                 }

@@ -7,12 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -66,12 +72,12 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem(
             route = "HomeScreen",
             title = "Home",
-            icon = android.R.drawable.ic_menu_today // Replace with your own icon
+            icon = R.drawable.home // Replace with your own icon
         ),
         BottomNavItem(
             route = "CustomQueryScreen",
             title = "AI Guidance",
-            icon = android.R.drawable.ic_menu_info_details // Replace with your own icon
+            icon = R.drawable.lightbulb // Replace with your own icon
         ),
         BottomNavItem(
             route = "MedicationAlarmScreen",
@@ -81,18 +87,29 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem(
             route = "EmergencySOS",
             title = "SOS",
-            icon = android.R.drawable.ic_menu_search // Replace with your own icon
+            icon = R.drawable.emergencycall // Replace with your own icon
         )
     )
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = Color(0xFF2584E1), // Entire background set to the specified color
+        contentColor = Color.White, // Default content color for contrast
+        modifier = Modifier
+            .shadow(8.dp, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
             NavigationBarItem(
-                icon = { Icon(painter = painterResource(id = item.icon), contentDescription = item.title) },
-                label = { Text(item.title) },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = item.title,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
+                label = { Text(item.title, fontSize = 12.sp) },
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
@@ -105,7 +122,14 @@ fun BottomNavigationBar(navController: NavHostController) {
                         // Restore state when reselecting a previously selected item
                         restoreState = true
                     }
-                }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = Color.White, // Selected icon color for contrast
+                    selectedTextColor = Color.White, // Selected text color for contrast
+                    unselectedIconColor = Color.White.copy(alpha = 0.6f), // Unselected icon color
+                    unselectedTextColor = Color.White.copy(alpha = 0.6f), // Unselected text color
+                    indicatorColor = Color.White.copy(alpha = 0.3f) // Indicator background
+                )
             )
         }
     }
@@ -192,22 +216,30 @@ fun AppNavHost(
         composable("EmergencyContactScreen") {
             EmergencyContactScreen(navController)
         }
-
         composable("CustomQueryScreen") {
-            CustomQueryScreen(viewModelFactory ,navController)
+            CustomQueryScreen(viewModelFactory, navController)
         }
         composable("DiabetesGeminiScreen") {
-           DiabetesGeminiScreen(viewModelFactory ,navController)
+            DiabetesGeminiScreen(viewModelFactory, navController)
         }
         composable("EmergencySOS") {
             EmergencySOS(navController)
         }
         composable("MedicationAlarmScreen") {
-        MedicationAlarmScreen(navController)
+            MedicationAlarmScreen(navController)
         }
-
         composable("CostPrediction") {
-            CostPrediction( navController)
+            CostPrediction(navController)
+        }
+        composable("CostCheckupDiagChooseScreen") {
+            CostCheckupDiagChooseScreen(
+                onDiabetesClick = { navController.navigate("MedicalCheckupScreen") },
+                onHeartClick = { navController.navigate("CostPrediction") },
+                navController
+            )
+        }
+        composable("MedicalCheckupScreen") {
+            MedicalCheckupScreen(navController)
         }
     }
 }
