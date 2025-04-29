@@ -72,28 +72,28 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem(
             route = "HomeScreen",
             title = "Home",
-            icon = R.drawable.home // Replace with your own icon
+            icon = R.drawable.home
         ),
         BottomNavItem(
             route = "CustomQueryScreen",
             title = "AI Guidance",
-            icon = R.drawable.lightbulb // Replace with your own icon
+            icon = R.drawable.lightbulb
         ),
         BottomNavItem(
             route = "MedicationAlarmScreen",
             title = "Reminder",
-            icon = android.R.drawable.ic_menu_agenda // Replace with your own icon
+            icon = android.R.drawable.ic_menu_agenda
         ),
         BottomNavItem(
             route = "EmergencySOS",
             title = "SOS",
-            icon = R.drawable.emergencycall // Replace with your own icon
+            icon = R.drawable.emergencycall
         )
     )
 
     NavigationBar(
-        containerColor = Color(0xFF2584E1), // Entire background set to the specified color
-        contentColor = Color.White, // Default content color for contrast
+        containerColor = Color(0xFF2584E1),
+        contentColor = Color.White,
         modifier = Modifier
             .shadow(8.dp, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
     ) {
@@ -112,23 +112,31 @@ fun BottomNavigationBar(navController: NavHostController) {
                 label = { Text(item.title, fontSize = 12.sp) },
                 selected = currentRoute == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        // Pop up to the start destination to avoid stacking screens
-                        popUpTo(navController.graph.startDestinationId) {
-                            saveState = true
+                    if (item.route == "HomeScreen") {
+                        // For HomeScreen, pop the entire back stack and navigate to HomeScreen
+                        navController.navigate("HomeScreen") {
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
-                        // Avoid multiple instances of the same screen
-                        launchSingleTop = true
-                        // Restore state when reselecting a previously selected item
-                        restoreState = true
+                    } else {
+                        // For other destinations, navigate with popUpTo HomeScreen
+                        navController.navigate(item.route) {
+                            popUpTo("HomeScreen") {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.White, // Selected icon color for contrast
-                    selectedTextColor = Color.White, // Selected text color for contrast
-                    unselectedIconColor = Color.White.copy(alpha = 0.6f), // Unselected icon color
-                    unselectedTextColor = Color.White.copy(alpha = 0.6f), // Unselected text color
-                    indicatorColor = Color.White.copy(alpha = 0.3f) // Indicator background
+                    selectedIconColor = Color.White,
+                    selectedTextColor = Color.White,
+                    unselectedIconColor = Color.White.copy(alpha = 0.6f),
+                    unselectedTextColor = Color.White.copy(alpha = 0.6f),
+                    indicatorColor = Color.White.copy(alpha = 0.3f)
                 )
             )
         }
