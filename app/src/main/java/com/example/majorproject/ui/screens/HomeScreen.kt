@@ -88,7 +88,7 @@ fun HomeScreen(navController: NavController) {
                         color = Color(0xFF1A3C6D)
                     )
                     AnimatedIconButton(
-                        onClick = { /* Settings action */ },
+                        onClick = {showComingSoonDialog = true },
                         iconRes = R.drawable.baseline_settings_24,
                         contentDescription = "Settings",
                         tint = Color(0xFF1976D2)
@@ -131,7 +131,7 @@ fun HomeScreen(navController: NavController) {
                         )
                         FavoriteToolItem(
                             title = "Cost Prediction",
-                            description = "Use AI to predict diseases based on your health data",
+                            description = "Use AI to predict your Chek-Up and Diagones Cost",
                             imageRes = R.drawable.costpred,
                             gradientColors = listOf(Color(0xFF2196F3), Color(0xFF64B5F6)),
                             onClick = {navController.navigate("CostCheckupDiagChooseScreen") }
@@ -191,7 +191,7 @@ fun HomeScreen(navController: NavController) {
                                         title = "Inventory Management",
                                         iconTint = Color(0xFF009688),
                                         gradientColors = listOf(Color(0xFF009688), Color(0xFF4DB6AC)),
-                                        onClick = { navController.navigate("CostPrediction") }
+                                        onClick = { showComingSoonDialog = true }
                                     )
                                 )
                             ) { item ->

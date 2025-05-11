@@ -80,8 +80,8 @@ fun BottomNavigationBar(navController: NavHostController) {
             icon = R.drawable.lightbulb
         ),
         BottomNavItem(
-            route = "MedicationAlarmScreen",
-            title = "Reminder",
+            route = "OpenUrl",
+            title = "HealthBlogs",
             icon = android.R.drawable.ic_menu_agenda
         ),
         BottomNavItem(
@@ -248,6 +248,9 @@ fun AppNavHost(
         }
         composable("MedicalCheckupScreen") {
             MedicalCheckupScreen(navController)
+        }
+        composable("OpenUrl") {
+           OpenUrlScreen(navController)
         }
     }
 }
